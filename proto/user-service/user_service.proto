@@ -56,6 +56,7 @@ message UserProfileResponse { // Ответ без пароля для безо�
   string email = 3;
   string FIO = 4; // Фамилия, имя, отчество
   string phoneNumber = 5;
+  Roles role = 6; // Роль пользователя
 }
 
 message UserListResponse {
