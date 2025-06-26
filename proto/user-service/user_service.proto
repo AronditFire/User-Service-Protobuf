@@ -47,7 +47,7 @@ message LogoutRequest {
 
 // Логика профиля пользователя
 message GetProfileRequest {
-  string user_id = 1;
+  int64 user_id = 1;
 }
 
 message UserProfileResponse { // Ответ без пароля для безопасности

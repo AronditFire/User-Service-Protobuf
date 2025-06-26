@@ -476,7 +476,7 @@ func (x *LogoutRequest) GetRefreshToken() string {
 // Логика профиля пользователя
 type GetProfileRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	UserId        int64                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -511,11 +511,11 @@ func (*GetProfileRequest) Descriptor() ([]byte, []int) {
 	return file_user_service_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *GetProfileRequest) GetUserId() string {
+func (x *GetProfileRequest) GetUserId() int64 {
 	if x != nil {
 		return x.UserId
 	}
-	return ""
+	return 0
 }
 
 type UserProfileResponse struct {
@@ -674,7 +674,7 @@ const file_user_service_proto_rawDesc = "" +
 	"\rLogoutRequest\x12#\n" +
 	"\rrefresh_token\x18\x01 \x01(\tR\frefreshToken\",\n" +
 	"\x11GetProfileRequest\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\tR\x06userId\"\x8b\x01\n" +
+	"\auser_id\x18\x01 \x01(\x03R\x06userId\"\x8b\x01\n" +
 	"\x13UserProfileResponse\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1a\n" +
 	"\busername\x18\x02 \x01(\tR\busername\x12\x14\n" +
