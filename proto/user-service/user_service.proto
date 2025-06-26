@@ -57,6 +57,7 @@ message UserProfileResponse { // Ответ без пароля для безо�
   string FIO = 4; // Фамилия, имя, отчество
   string phoneNumber = 5;
   Roles role = 6; // Роль пользователя
+  // to commit
 }
 
 message UserListResponse {
@@ -70,8 +71,6 @@ service UserService {
   rpc RefreshToken(RefreshRequest) returns (RefreshResponse);
   rpc Logout(LogoutRequest) returns (google.protobuf.Empty);
 
-  // User Profile
-  // TODO: В будущем логика обновления email, phoneNumber, FIO, password
   rpc GetProfile(GetProfileRequest) returns (UserProfileResponse);
 
   // Admin
