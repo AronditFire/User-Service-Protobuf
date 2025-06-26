@@ -594,6 +594,50 @@ func (x *UserProfileResponse) GetPhoneNumber() string {
 	return ""
 }
 
+type UserListResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Users         []*UserProfileResponse `protobuf:"bytes,1,rep,name=users,proto3" json:"users,omitempty"` // Список пользователей
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UserListResponse) Reset() {
+	*x = UserListResponse{}
+	mi := &file_user_service_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UserListResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UserListResponse) ProtoMessage() {}
+
+func (x *UserListResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_user_service_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UserListResponse.ProtoReflect.Descriptor instead.
+func (*UserListResponse) Descriptor() ([]byte, []int) {
+	return file_user_service_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *UserListResponse) GetUsers() []*UserProfileResponse {
+	if x != nil {
+		return x.Users
+	}
+	return nil
+}
+
 type AdminRoleRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	UserId        int64                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
@@ -604,7 +648,7 @@ type AdminRoleRequest struct {
 
 func (x *AdminRoleRequest) Reset() {
 	*x = AdminRoleRequest{}
-	mi := &file_user_service_proto_msgTypes[10]
+	mi := &file_user_service_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -616,7 +660,7 @@ func (x *AdminRoleRequest) String() string {
 func (*AdminRoleRequest) ProtoMessage() {}
 
 func (x *AdminRoleRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_user_service_proto_msgTypes[10]
+	mi := &file_user_service_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -629,7 +673,7 @@ func (x *AdminRoleRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AdminRoleRequest.ProtoReflect.Descriptor instead.
 func (*AdminRoleRequest) Descriptor() ([]byte, []int) {
-	return file_user_service_proto_rawDescGZIP(), []int{10}
+	return file_user_service_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *AdminRoleRequest) GetUserId() int64 {
@@ -680,22 +724,24 @@ const file_user_service_proto_rawDesc = "" +
 	"\busername\x18\x02 \x01(\tR\busername\x12\x14\n" +
 	"\x05email\x18\x03 \x01(\tR\x05email\x12\x10\n" +
 	"\x03FIO\x18\x04 \x01(\tR\x03FIO\x12 \n" +
-	"\vphoneNumber\x18\x05 \x01(\tR\vphoneNumber\"T\n" +
+	"\vphoneNumber\x18\x05 \x01(\tR\vphoneNumber\"K\n" +
+	"\x10UserListResponse\x127\n" +
+	"\x05users\x18\x01 \x03(\v2!.user_profile.UserProfileResponseR\x05users\"T\n" +
 	"\x10AdminRoleRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\x03R\x06userId\x12'\n" +
 	"\x04role\x18\x02 \x01(\x0e2\x13.user_profile.RolesR\x04role**\n" +
 	"\x05Roles\x12\v\n" +
 	"\aUNKNOWN\x10\x00\x12\t\n" +
 	"\x05BUYER\x10\x01\x12\t\n" +
-	"\x05ADMIN\x10\x022\x88\x04\n" +
+	"\x05ADMIN\x10\x022\x83\x04\n" +
 	"\vUserService\x12I\n" +
 	"\bRegister\x12\x1d.user_profile.RegisterRequest\x1a\x1e.user_profile.RegisterResponse\x12@\n" +
 	"\x05Login\x12\x1a.user_profile.LoginRequest\x1a\x1b.user_profile.LoginResponse\x12K\n" +
 	"\fRefreshToken\x12\x1c.user_profile.RefreshRequest\x1a\x1d.user_profile.RefreshResponse\x12=\n" +
 	"\x06Logout\x12\x1b.user_profile.LogoutRequest\x1a\x16.google.protobuf.Empty\x12P\n" +
 	"\n" +
-	"GetProfile\x12\x1f.user_profile.GetProfileRequest\x1a!.user_profile.UserProfileResponse\x12H\n" +
-	"\tListUsers\x12\x16.google.protobuf.Empty\x1a!.user_profile.UserProfileResponse0\x01\x12D\n" +
+	"GetProfile\x12\x1f.user_profile.GetProfileRequest\x1a!.user_profile.UserProfileResponse\x12C\n" +
+	"\tListUsers\x12\x16.google.protobuf.Empty\x1a\x1e.user_profile.UserListResponse\x12D\n" +
 	"\n" +
 	"ChangeRole\x12\x1e.user_profile.AdminRoleRequest\x1a\x16.google.protobuf.EmptyB\x1bZ\x19userService.v1;uservicev1b\x06proto3"
 
@@ -712,7 +758,7 @@ func file_user_service_proto_rawDescGZIP() []byte {
 }
 
 var file_user_service_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_user_service_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_user_service_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_user_service_proto_goTypes = []any{
 	(Roles)(0),                  // 0: user_profile.Roles
 	(*RegisterRequest)(nil),     // 1: user_profile.RegisterRequest
@@ -725,32 +771,34 @@ var file_user_service_proto_goTypes = []any{
 	(*LogoutRequest)(nil),       // 8: user_profile.LogoutRequest
 	(*GetProfileRequest)(nil),   // 9: user_profile.GetProfileRequest
 	(*UserProfileResponse)(nil), // 10: user_profile.UserProfileResponse
-	(*AdminRoleRequest)(nil),    // 11: user_profile.AdminRoleRequest
-	(*emptypb.Empty)(nil),       // 12: google.protobuf.Empty
+	(*UserListResponse)(nil),    // 11: user_profile.UserListResponse
+	(*AdminRoleRequest)(nil),    // 12: user_profile.AdminRoleRequest
+	(*emptypb.Empty)(nil),       // 13: google.protobuf.Empty
 }
 var file_user_service_proto_depIdxs = []int32{
 	4,  // 0: user_profile.LoginResponse.tokens:type_name -> user_profile.Tokens
 	4,  // 1: user_profile.RefreshResponse.tokens:type_name -> user_profile.Tokens
-	0,  // 2: user_profile.AdminRoleRequest.role:type_name -> user_profile.Roles
-	1,  // 3: user_profile.UserService.Register:input_type -> user_profile.RegisterRequest
-	3,  // 4: user_profile.UserService.Login:input_type -> user_profile.LoginRequest
-	6,  // 5: user_profile.UserService.RefreshToken:input_type -> user_profile.RefreshRequest
-	8,  // 6: user_profile.UserService.Logout:input_type -> user_profile.LogoutRequest
-	9,  // 7: user_profile.UserService.GetProfile:input_type -> user_profile.GetProfileRequest
-	12, // 8: user_profile.UserService.ListUsers:input_type -> google.protobuf.Empty
-	11, // 9: user_profile.UserService.ChangeRole:input_type -> user_profile.AdminRoleRequest
-	2,  // 10: user_profile.UserService.Register:output_type -> user_profile.RegisterResponse
-	5,  // 11: user_profile.UserService.Login:output_type -> user_profile.LoginResponse
-	7,  // 12: user_profile.UserService.RefreshToken:output_type -> user_profile.RefreshResponse
-	12, // 13: user_profile.UserService.Logout:output_type -> google.protobuf.Empty
-	10, // 14: user_profile.UserService.GetProfile:output_type -> user_profile.UserProfileResponse
-	10, // 15: user_profile.UserService.ListUsers:output_type -> user_profile.UserProfileResponse
-	12, // 16: user_profile.UserService.ChangeRole:output_type -> google.protobuf.Empty
-	10, // [10:17] is the sub-list for method output_type
-	3,  // [3:10] is the sub-list for method input_type
-	3,  // [3:3] is the sub-list for extension type_name
-	3,  // [3:3] is the sub-list for extension extendee
-	0,  // [0:3] is the sub-list for field type_name
+	10, // 2: user_profile.UserListResponse.users:type_name -> user_profile.UserProfileResponse
+	0,  // 3: user_profile.AdminRoleRequest.role:type_name -> user_profile.Roles
+	1,  // 4: user_profile.UserService.Register:input_type -> user_profile.RegisterRequest
+	3,  // 5: user_profile.UserService.Login:input_type -> user_profile.LoginRequest
+	6,  // 6: user_profile.UserService.RefreshToken:input_type -> user_profile.RefreshRequest
+	8,  // 7: user_profile.UserService.Logout:input_type -> user_profile.LogoutRequest
+	9,  // 8: user_profile.UserService.GetProfile:input_type -> user_profile.GetProfileRequest
+	13, // 9: user_profile.UserService.ListUsers:input_type -> google.protobuf.Empty
+	12, // 10: user_profile.UserService.ChangeRole:input_type -> user_profile.AdminRoleRequest
+	2,  // 11: user_profile.UserService.Register:output_type -> user_profile.RegisterResponse
+	5,  // 12: user_profile.UserService.Login:output_type -> user_profile.LoginResponse
+	7,  // 13: user_profile.UserService.RefreshToken:output_type -> user_profile.RefreshResponse
+	13, // 14: user_profile.UserService.Logout:output_type -> google.protobuf.Empty
+	10, // 15: user_profile.UserService.GetProfile:output_type -> user_profile.UserProfileResponse
+	11, // 16: user_profile.UserService.ListUsers:output_type -> user_profile.UserListResponse
+	13, // 17: user_profile.UserService.ChangeRole:output_type -> google.protobuf.Empty
+	11, // [11:18] is the sub-list for method output_type
+	4,  // [4:11] is the sub-list for method input_type
+	4,  // [4:4] is the sub-list for extension type_name
+	4,  // [4:4] is the sub-list for extension extendee
+	0,  // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_user_service_proto_init() }
@@ -764,7 +812,7 @@ func file_user_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_service_proto_rawDesc), len(file_user_service_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   11,
+			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

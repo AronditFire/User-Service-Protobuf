@@ -42,7 +42,7 @@ type UserServiceClient interface {
 	// TODO: В будущем логика обновления email, phoneNumber, FIO, password
 	GetProfile(ctx context.Context, in *GetProfileRequest, opts ...grpc.CallOption) (*UserProfileResponse, error)
 	// Admin
-	ListUsers(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[UserProfileResponse], error)
+	ListUsers(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*UserListResponse, error)
 	ChangeRole(ctx context.Context, in *AdminRoleRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
@@ -104,24 +104,15 @@ func (c *userServiceClient) GetProfile(ctx context.Context, in *GetProfileReques
 	return out, nil
 }
 
-func (c *userServiceClient) ListUsers(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[UserProfileResponse], error) {
+func (c *userServiceClient) ListUsers(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*UserListResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &UserService_ServiceDesc.Streams[0], UserService_ListUsers_FullMethodName, cOpts...)
+	out := new(UserListResponse)
+	err := c.cc.Invoke(ctx, UserService_ListUsers_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &grpc.GenericClientStream[emptypb.Empty, UserProfileResponse]{ClientStream: stream}
-	if err := x.ClientStream.SendMsg(in); err != nil {
-		return nil, err
-	}
-	if err := x.ClientStream.CloseSend(); err != nil {
-		return nil, err
-	}
-	return x, nil
+	return out, nil
 }
-
-// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type UserService_ListUsersClient = grpc.ServerStreamingClient[UserProfileResponse]
 
 func (c *userServiceClient) ChangeRole(ctx context.Context, in *AdminRoleRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
@@ -146,7 +137,7 @@ type UserServiceServer interface {
 	// TODO: В будущем логика обновления email, phoneNumber, FIO, password
 	GetProfile(context.Context, *GetProfileRequest) (*UserProfileResponse, error)
 	// Admin
-	ListUsers(*emptypb.Empty, grpc.ServerStreamingServer[UserProfileResponse]) error
+	ListUsers(context.Context, *emptypb.Empty) (*UserListResponse, error)
 	ChangeRole(context.Context, *AdminRoleRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
@@ -173,8 +164,8 @@ func (UnimplementedUserServiceServer) Logout(context.Context, *LogoutRequest) (*
 func (UnimplementedUserServiceServer) GetProfile(context.Context, *GetProfileRequest) (*UserProfileResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetProfile not implemented")
 }
-func (UnimplementedUserServiceServer) ListUsers(*emptypb.Empty, grpc.ServerStreamingServer[UserProfileResponse]) error {
-	return status.Errorf(codes.Unimplemented, "method ListUsers not implemented")
+func (UnimplementedUserServiceServer) ListUsers(context.Context, *emptypb.Empty) (*UserListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListUsers not implemented")
 }
 func (UnimplementedUserServiceServer) ChangeRole(context.Context, *AdminRoleRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ChangeRole not implemented")
@@ -290,16 +281,23 @@ func _UserService_GetProfile_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
-func _UserService_ListUsers_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(emptypb.Empty)
-	if err := stream.RecvMsg(m); err != nil {
-		return err
+func _UserService_ListUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
 	}
-	return srv.(UserServiceServer).ListUsers(m, &grpc.GenericServerStream[emptypb.Empty, UserProfileResponse]{ServerStream: stream})
+	if interceptor == nil {
+		return srv.(UserServiceServer).ListUsers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserService_ListUsers_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).ListUsers(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
 }
-
-// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type UserService_ListUsersServer = grpc.ServerStreamingServer[UserProfileResponse]
 
 func _UserService_ChangeRole_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AdminRoleRequest)
@@ -347,16 +345,14 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _UserService_GetProfile_Handler,
 		},
 		{
+			MethodName: "ListUsers",
+			Handler:    _UserService_ListUsers_Handler,
+		},
+		{
 			MethodName: "ChangeRole",
 			Handler:    _UserService_ChangeRole_Handler,
 		},
 	},
-	Streams: []grpc.StreamDesc{
-		{
-			StreamName:    "ListUsers",
-			Handler:       _UserService_ListUsers_Handler,
-			ServerStreams: true,
-		},
-	},
+	Streams:  []grpc.StreamDesc{},
 	Metadata: "user_service.proto",
 }

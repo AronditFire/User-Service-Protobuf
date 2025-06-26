@@ -58,6 +58,10 @@ message UserProfileResponse { // Ответ без пароля для безо�
   string phoneNumber = 5;
 }
 
+message UserListResponse {
+  repeated UserProfileResponse users = 1; // Список пользователей
+}
+
 service UserService {
   // Auth
   rpc Register(RegisterRequest) returns (RegisterResponse);
@@ -70,7 +74,7 @@ service UserService {
   rpc GetProfile(GetProfileRequest) returns (UserProfileResponse);
 
   // Admin
-  rpc ListUsers(google.protobuf.Empty) returns (stream UserProfileResponse);
+  rpc ListUsers(google.protobuf.Empty) returns (UserListResponse);
   rpc ChangeRole(AdminRoleRequest) returns (google.protobuf.Empty);
 }
 
